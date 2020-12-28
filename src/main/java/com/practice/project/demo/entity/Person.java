@@ -1,14 +1,8 @@
 package com.practice.project.demo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -35,11 +29,7 @@ public class Person {
 
     private String job;
 
-    private boolean block;
-
-    private String blockReason;
-
-    private LocalDate blockStartDate;
-
-    private LocalDate bloclEndDate;
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Block block;
 }
