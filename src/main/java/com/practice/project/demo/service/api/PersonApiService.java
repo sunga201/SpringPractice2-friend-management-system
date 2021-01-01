@@ -4,12 +4,14 @@ import com.practice.project.demo.Repository.BlockRepository;
 import com.practice.project.demo.Repository.PersonRepository;
 import com.practice.project.demo.entity.Block;
 import com.practice.project.demo.entity.Person;
+import com.practice.project.demo.network.request.PersonRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class PersonApiService {
 
     private final PersonRepository personRepository;
-    //private final BlockRepository blockRepository;
+    private final BlockRepository blockRepository;
 
     public List<Person> getPeopleExcludeBlocks(){
         //List<Person> people = personRepository.findAll(); // 일반적으로 findAll 대신 findById를 사용
@@ -51,10 +53,33 @@ public class PersonApiService {
         return personRepository.findByName(name).get();
     }
 
-    public Person getPerson(Long id){
-        Person person = personRepository.findById(id).get();
-
+    public Person get(Long id){
+        Person person = personRepository.findById(id).orElse(null);
         log.info("{}", person);
         return person;
+    }
+
+    public void put(PersonRequest body){
+
+        Person renewalPerson = personRepository.findById(body.getId())
+                .orElseThrow(()->new RuntimeException("데이터가 존재하지 않습니다."));
+
+        renewalPerson.set(body);
+        log.info("renewal person : {}", renewalPerson);
+        personRepository.save(renewalPerson);
+    }
+
+    public void delete(Long id){
+        //personRepository.deleteById(id);
+
+        Person person = personRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("데이터가 존재하지 않습니다."));
+
+        person.setDeleted(true);
+        personRepository.save(person);
+    }
+
+    public void save(Person person){
+        personRepository.save(person);
     }
 }
