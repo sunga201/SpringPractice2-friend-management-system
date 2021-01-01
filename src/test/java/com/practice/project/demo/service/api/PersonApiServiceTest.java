@@ -4,9 +4,11 @@ import com.practice.project.demo.Repository.BlockRepository;
 import com.practice.project.demo.Repository.PersonRepository;
 import com.practice.project.demo.entity.Block;
 import com.practice.project.demo.entity.Person;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -26,18 +28,34 @@ class PersonApiServiceTest {
     private BlockRepository blockRepository;
 
     @Test
+    @Transactional
     public void getPeopleExcludeBlocks(){
-        givenPeople();
+        // givenPeople(); //data.sql을 이용한 자동화로 대체
 
-        personApiService.getPeopleExcludeBlocks().forEach(element->{
+        List<Person> list = personApiService.getPeopleExcludeBlocks();
+
+        list.forEach(element->{
             System.out.println(element);
         });
+
+        Assertions.assertEquals(list.size(), 4);
+    }
+
+    @Test
+    @Transactional
+    public void getPeopleByName(){
+        // givenPeople(); //data.sql을 이용한 자동화로 대체
+
+        List<Person> peopleList = personApiService.getPeopleByName("martin");
+
+        Assertions.assertEquals(peopleList.size(), 1);
+        Assertions.assertEquals(peopleList.get(0).getName(), "martin");
     }
 
     @Test
     @Transactional
     public void cascadeTest(){
-        givenPeople();
+        // givenPeople(); //data.sql을 이용한 자동화로 대체
 
         List<Person> people = personRepository.findAll();
 
@@ -59,31 +77,11 @@ class PersonApiServiceTest {
         blockRepository.findAll().forEach(System.out::println);
     }
 
-    @Test
-    @Transactional
     public void getPerson(){
-        givenPeople();
+        // givenPeople(); //data.sql을 이용한 자동화로 대체
 
-        Person person = personApiService.getPerson(93L);
+        Person person = personApiService.getPerson(1L);
         System.out.println(person);
-    }
-
-    public void givenPeople() {
-        givenPerson("martin",
-                10,
-                "A");
-
-        givenPerson("david",
-                9,
-                "B");
-
-        givenBlockPerson("dannis",
-                7,
-                "O");
-
-        givenBlockPerson("martin",
-                11,
-                "AB"); // 첫 번째 martin과 달리 검색이 되도록 한다.
     }
 
     public void givenPerson(String name, int age, String bloodType) {
