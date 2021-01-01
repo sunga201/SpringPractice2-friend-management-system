@@ -80,7 +80,7 @@ class PersonApiServiceTest {
     public void getPerson(){
         // givenPeople(); //data.sql을 이용한 자동화로 대체
 
-        Person person = personApiService.getPerson(1L);
+        Person person = personApiService.get(1L);
         System.out.println(person);
     }
 
