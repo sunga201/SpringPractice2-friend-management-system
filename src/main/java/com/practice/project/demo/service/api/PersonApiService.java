@@ -36,10 +36,12 @@ public class PersonApiService {
     }
 
     public void put(PersonRequest body){
+        log.info("body : {}", body);
         System.out.println("id : " + body.getId());
         Person renewalPerson = personRepository.findById(body.getId())
                 .orElseThrow(()->new RuntimeException("데이터가 존재하지 않습니다."));
 
+        log.info("in service, birthday : {}", body.getBirthday());
         renewalPerson.set(body);
         log.info("renewal person : {}", renewalPerson);
         personRepository.save(renewalPerson);

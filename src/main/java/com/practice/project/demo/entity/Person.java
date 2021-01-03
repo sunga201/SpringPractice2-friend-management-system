@@ -4,6 +4,7 @@ import com.practice.project.demo.entity.dto.Birthday;
 import com.practice.project.demo.network.request.PersonRequest;
 import lombok.*;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @Builder
 @Accessors(chain = true)
 @Where(clause = "deleted = false")
+@Slf4j
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +52,7 @@ public class Person {
         }
 
         if(body.getBirthday()!=null){
+            log.info("{}", body.getBirthday());
             this.birthday=body.getBirthday();
         }
 
@@ -62,13 +65,13 @@ public class Person {
         }
     }
 
-    public boolean isBirthdayToday(){
+    public boolean birthdayToday(){
         if(birthday == null) return false;
-        return birthday.isBirthdayToday();
+        return birthday.birthdayToday();
     }
 
-    public Integer getAge(){
+    public Integer age(){
         if(birthday == null) return null;
-        return birthday.getAge();
+        return birthday.age();
     }
 }

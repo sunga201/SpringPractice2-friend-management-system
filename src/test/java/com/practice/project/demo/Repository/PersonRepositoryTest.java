@@ -40,7 +40,7 @@ class PersonRepositoryTest {
         Assertions.assertEquals(result.get(0).getName(), "benny");
     }*/
 
-    public void givenPerson(String name, int age, String bloodType, LocalDate birthday) {
+    public void givenPerson(String name, LocalDate birthday) {
         Person p = Person.builder()
                 .name(name)
                 .build();
@@ -54,7 +54,7 @@ class PersonRepositoryTest {
         personRepository.findByMonthOfBirthday(8).get().forEach(System.out::println);
 
         Person martin = new Person();
-        martin.isBirthdayToday();
-        martin.getAge();
+        martin.birthdayToday();
+        martin.age();
     }
 }
