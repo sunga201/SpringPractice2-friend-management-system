@@ -4,6 +4,7 @@ import com.practice.project.demo.entity.dto.Birthday;
 import com.practice.project.demo.network.request.PersonRequest;
 import lombok.*;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @Builder
 @Accessors(chain = true)
 @Where(clause = "deleted = false")
+@Slf4j
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +38,6 @@ public class Person {
     @ColumnDefault("0")
     private boolean deleted;
 
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
-
     private String address;
 
     @Valid
@@ -49,16 +46,13 @@ public class Person {
 
     private String job;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Block block;
-
     public void set(PersonRequest body){
         if(body.getName()!=null){
             this.name=body.getName();
         }
 
         if(body.getBirthday()!=null){
+            log.info("{}", body.getBirthday());
             this.birthday=body.getBirthday();
         }
 
@@ -66,22 +60,18 @@ public class Person {
             this.hobby=body.getHobby();
         }
 
-        if(body.getBloodType()!=null){
-            this.bloodType=body.getBloodType();
-        }
-
         if(body.getJob()!=null){
             this.job=body.getJob();
         }
     }
 
-    public boolean isBirthdayToday(){
+    public boolean birthdayToday(){
         if(birthday == null) return false;
-        return birthday.isBirthdayToday();
+        return birthday.birthdayToday();
     }
 
-    public Integer getAge(){
+    public Integer age(){
         if(birthday == null) return null;
-        return birthday.getAge();
+        return birthday.age();
     }
 }

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @RestController
 @RequestMapping("api/person")
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class PersonApiController {
 
     @PutMapping("")
     public void put(@RequestBody PersonRequest personRequest){
+        System.out.println("request : " + personRequest);
         personApiService.put(personRequest);
         log.info("people : {}", personRepository.findAll());
     }
@@ -38,7 +41,6 @@ public class PersonApiController {
     public void delete(@PathVariable Long id){
         personApiService.delete(id);
         log.info("people : {}", personRepository.findAll());
-
         personRepository.findByDeletedIsTrue().stream().forEach(data -> log.info("{}", data));
     }
 }

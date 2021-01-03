@@ -1,20 +1,14 @@
 package com.practice.project.demo.service.api;
 
-import com.practice.project.demo.Repository.BlockRepository;
 import com.practice.project.demo.Repository.PersonRepository;
-import com.practice.project.demo.entity.Block;
 import com.practice.project.demo.entity.Person;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PersonApiServiceTest {
@@ -23,24 +17,7 @@ class PersonApiServiceTest {
 
     @Autowired
     private PersonRepository personRepository;
-
-    @Autowired
-    private BlockRepository blockRepository;
-
-    @Test
-    @Transactional
-    public void getPeopleExcludeBlocks(){
-        // givenPeople(); //data.sql을 이용한 자동화로 대체
-
-        List<Person> list = personApiService.getPeopleExcludeBlocks();
-
-        list.forEach(element->{
-            System.out.println(element);
-        });
-
-        Assertions.assertEquals(list.size(), 4);
-    }
-
+    
     @Test
     @Transactional
     public void getPeopleByName(){
@@ -62,10 +39,6 @@ class PersonApiServiceTest {
         people.forEach(System.out::println);
 
         Person person = people.get(3);
-        if(person.getBlock() != null) {
-            person.getBlock().setRegisteredAt(LocalDate.now());
-            person.getBlock().setUnregisteredAt(LocalDate.now());
-        }
         personRepository.save(person);
         personRepository.findAll().forEach(System.out::println);
 
@@ -73,10 +46,8 @@ class PersonApiServiceTest {
         // personRepository.findAll().forEach(System.out::println);
         // blockRepository.findAll().forEach(System.out::println);
 
-        person.setBlock(null);
         personRepository.save(person);
         personRepository.findAll().forEach(System.out::println);
-        blockRepository.findAll().forEach(System.out::println);
     }
 
     public void getPerson(){
@@ -89,7 +60,6 @@ class PersonApiServiceTest {
     public void givenPerson(String name, int age, String bloodType) {
         Person p = Person.builder()
                 .name(name)
-                .bloodType(bloodType)
                 .build();
         personRepository.save(p);
     }
@@ -97,8 +67,6 @@ class PersonApiServiceTest {
     public void givenBlockPerson(String name, int age, String bloodType){
         Person blockPerson = Person.builder()
                 .name(name)
-                .bloodType(bloodType)
-                .block(Block.builder().name(name).reason("그냥").build())
                 .build();
 
        personRepository.save(blockPerson);

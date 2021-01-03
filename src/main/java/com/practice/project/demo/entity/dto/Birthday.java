@@ -1,9 +1,6 @@
 package com.practice.project.demo.entity.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -36,11 +33,11 @@ public class Birthday {
         this.dayOfBirthday = birthday.getDayOfMonth();
     }
 
-    public int getAge(){
+    public int age(){
         return LocalDate.now().getYear() - this.yearOfBirthday + 1;
     }
 
-    public boolean isBirthdayToday(){
+    public boolean birthdayToday(){
         return LocalDate.now().equals(LocalDate.of(yearOfBirthday, monthOfBirthday, dayOfBirthday));
     }
     public static Birthday of(LocalDate birthday){
