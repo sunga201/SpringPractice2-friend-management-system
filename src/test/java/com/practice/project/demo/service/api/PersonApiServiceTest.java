@@ -46,10 +46,10 @@ class PersonApiServiceTest {
     public void getPeopleByName(){
         // givenPeople(); //data.sql을 이용한 자동화로 대체
 
-        List<Person> peopleList = personApiService.getPeopleByName("martin");
+        List<Person> peopleList = personApiService.getPeopleByName("sophia");
 
         Assertions.assertEquals(peopleList.size(), 1);
-        Assertions.assertEquals(peopleList.get(0).getName(), "martin");
+        Assertions.assertEquals(peopleList.get(0).getName(), "sophia");
     }
 
     @Test
@@ -62,8 +62,10 @@ class PersonApiServiceTest {
         people.forEach(System.out::println);
 
         Person person = people.get(3);
-        person.getBlock().setRegisteredAt(LocalDate.now());
-        person.getBlock().setUnregisteredAt(LocalDate.now());
+        if(person.getBlock() != null) {
+            person.getBlock().setRegisteredAt(LocalDate.now());
+            person.getBlock().setUnregisteredAt(LocalDate.now());
+        }
         personRepository.save(person);
         personRepository.findAll().forEach(System.out::println);
 
@@ -87,7 +89,6 @@ class PersonApiServiceTest {
     public void givenPerson(String name, int age, String bloodType) {
         Person p = Person.builder()
                 .name(name)
-                .age(age)
                 .bloodType(bloodType)
                 .build();
         personRepository.save(p);
@@ -96,7 +97,6 @@ class PersonApiServiceTest {
     public void givenBlockPerson(String name, int age, String bloodType){
         Person blockPerson = Person.builder()
                 .name(name)
-                .age(age)
                 .bloodType(bloodType)
                 .block(Block.builder().name(name).reason("그냥").build())
                 .build();

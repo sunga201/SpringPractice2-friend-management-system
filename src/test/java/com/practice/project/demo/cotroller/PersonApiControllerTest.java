@@ -53,7 +53,7 @@ class PersonApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\" : 1," +
                         " \"name\" : \"changeMartin\"," +
-                        " \"age\" : 26, \"bloodType\" : \"A\"," +
+                        " \"bloodType\" : \"A\"," +
                         " \"blockId\" : \"null\"}")
         ).andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -62,7 +62,7 @@ class PersonApiControllerTest {
     @Test
     void delete() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/person/1")
+                MockMvcRequestBuilders.delete("/api/person/2")
         ).andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

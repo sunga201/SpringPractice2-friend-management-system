@@ -31,11 +31,6 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @NonNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer age;
-
     private String hobby;
 
     @ColumnDefault("0")
@@ -63,10 +58,6 @@ public class Person {
             this.name=body.getName();
         }
 
-        if(body.getAge()!=null){
-            this.age=body.getAge();
-        }
-
         if(body.getBirthday()!=null){
             this.birthday=body.getBirthday();
         }
@@ -82,5 +73,15 @@ public class Person {
         if(body.getJob()!=null){
             this.job=body.getJob();
         }
+    }
+
+    public boolean isBirthdayToday(){
+        if(birthday == null) return false;
+        return birthday.isBirthdayToday();
+    }
+
+    public Integer getAge(){
+        if(birthday == null) return null;
+        return birthday.getAge();
     }
 }
