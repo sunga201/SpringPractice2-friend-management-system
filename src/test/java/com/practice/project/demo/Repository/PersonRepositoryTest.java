@@ -23,7 +23,6 @@ class PersonRepositoryTest {
                 .name("Brown")
                 .hobby("puzzle")
                 .address("서울시 동대문구")
-                .bloodType("O")
                 .job("backend engineer")
                 .build();
 
@@ -33,18 +32,17 @@ class PersonRepositoryTest {
         System.out.println(personRepository.findByName("sophia").get());
     }
 
-    @Test
+    /*@Test // bloodtype 지웠음. 테스트케이스도 같이 제거
     public void getByBloodType(){
         List<Person> result = personRepository.findByBloodType("O").get();
         personRepository.findAll().forEach(System.out::println);
         Assertions.assertEquals(result.size(), 2);
         Assertions.assertEquals(result.get(0).getName(), "benny");
-    }
+    }*/
 
     public void givenPerson(String name, int age, String bloodType, LocalDate birthday) {
         Person p = Person.builder()
                 .name(name)
-                .bloodType(bloodType)
                 .build();
 
         p.setBirthday(Birthday.of(birthday));

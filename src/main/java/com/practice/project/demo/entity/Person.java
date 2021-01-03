@@ -36,11 +36,6 @@ public class Person {
     @ColumnDefault("0")
     private boolean deleted;
 
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
-
     private String address;
 
     @Valid
@@ -48,10 +43,6 @@ public class Person {
     private Birthday birthday;
 
     private String job;
-
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Block block;
 
     public void set(PersonRequest body){
         if(body.getName()!=null){
@@ -64,10 +55,6 @@ public class Person {
 
         if(body.getHobby()!=null){
             this.hobby=body.getHobby();
-        }
-
-        if(body.getBloodType()!=null){
-            this.bloodType=body.getBloodType();
         }
 
         if(body.getJob()!=null){

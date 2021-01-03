@@ -1,6 +1,5 @@
 package com.practice.project.demo.network.request;
 
-import com.practice.project.demo.entity.Block;
 import com.practice.project.demo.entity.dto.Birthday;
 import lombok.*;
 
