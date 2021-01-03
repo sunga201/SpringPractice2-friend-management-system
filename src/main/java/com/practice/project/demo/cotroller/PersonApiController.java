@@ -32,6 +32,7 @@ public class PersonApiController {
 
     @PutMapping("")
     public void put(@RequestBody PersonRequest personRequest){
+        System.out.println("request : " + personRequest);
         personApiService.put(personRequest);
         log.info("people : {}", personRepository.findAll());
     }

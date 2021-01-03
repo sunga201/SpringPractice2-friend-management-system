@@ -12,14 +12,20 @@ import org.apache.tomcat.util.descriptor.web.FragmentJarScannerCallback;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.JsonPathResultMatchers;
+import org.springframework.test.web.servlet.result.JsonPathResultMatchersDsl;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.jayway.jsonpath.JsonPath;
 
 import java.time.LocalDate;
 
@@ -37,18 +43,23 @@ class PersonApiControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private MappingJackson2HttpMessageConverter messageConverter;
     private MockMvc mockMvc;
 
     @BeforeEach
     void beforeEach(){
-        mockMvc = MockMvcBuilders.standaloneSetup(personApiController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(personApiController).setMessageConverters(messageConverter).build();
     }
     @Test
     void get() throws Exception{
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/person/2")
-        ).andDo(print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                MockMvcRequestBuilders.get("/api/person/1"))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("martin"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.hobby").isEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address").isEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.birthday").value("1996-08-15"));
     }
 
     @Test

@@ -20,22 +20,10 @@ public class PersonRequest {
     @Column(nullable = false)
     private String name;
 
-    @NonNull
-    @Min(1)
-    @Column(nullable = false)
-    private Integer age;
-
     private String hobby;
-
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
-    private String bloodType;
 
     private String address;
 
-    @Valid
-    @Embedded
     private Birthday birthday;
 
     private String job;
