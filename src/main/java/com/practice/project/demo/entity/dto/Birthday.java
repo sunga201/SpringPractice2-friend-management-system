@@ -22,17 +22,28 @@ public class Birthday {
 
     private Integer yearOfBirthday;
 
-    @Min(1)
-    @Max(12)
+    /*@Min(1) // LocalDate로 체크하므로, 필요없다.
+    @Max(12)*/
     private Integer monthOfBirthday;
 
-    @Min(1)
-    @Max(31)
+    /*@Min(1) // LocalDate로 체크하므로, 필요없다.
+    @Max(31)*/
     private Integer dayOfBirthday;
 
-    public Birthday(LocalDate birthday){
+    private Birthday(LocalDate birthday){
         this.yearOfBirthday = birthday.getYear();
         this.monthOfBirthday = birthday.getMonthValue();
         this.dayOfBirthday = birthday.getDayOfMonth();
+    }
+
+    public int getAge(){
+        return LocalDate.now().getYear() - this.yearOfBirthday + 1;
+    }
+
+    public boolean isBirthdayToday(){
+        return LocalDate.now().equals(LocalDate.of(yearOfBirthday, monthOfBirthday, dayOfBirthday));
+    }
+    public static Birthday of(LocalDate birthday){
+        return new Birthday(birthday);
     }
 }
