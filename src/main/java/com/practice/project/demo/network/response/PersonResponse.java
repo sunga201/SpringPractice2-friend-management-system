@@ -20,13 +20,11 @@ public class PersonResponse {
 
     private String hobby;
 
-    private String bloodType;
+    private boolean deleted;
 
     private String address;
 
     private Birthday birthday;
 
     private String job;
-
-    private int blockId;
 }

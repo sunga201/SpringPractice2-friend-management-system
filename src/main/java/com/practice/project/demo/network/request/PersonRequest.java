@@ -7,26 +7,25 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PersonRequest {
+
     private Long id;
 
-    @NonNull
-    @NotEmpty
-    @Column(nullable = false)
     private String name;
 
     private String hobby;
 
     private String address;
 
-    private Birthday birthday;
+    private boolean deleted;
+
+    private LocalDate birthday;
 
     private String job;
-
-    private Long blockId;
 }

@@ -53,7 +53,7 @@ public class Person {
 
         if(body.getBirthday()!=null){
             log.info("{}", body.getBirthday());
-            this.birthday=body.getBirthday();
+            this.birthday=Birthday.of(body.getBirthday());
         }
 
         if(body.getHobby()!=null){
@@ -62,6 +62,10 @@ public class Person {
 
         if(body.getJob()!=null){
             this.job=body.getJob();
+        }
+
+        if(body.getAddress()!=null){
+            this.address=body.getAddress();
         }
     }
 

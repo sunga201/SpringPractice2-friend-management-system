@@ -25,9 +25,9 @@ public class PersonApiController {
     }
 
     @PostMapping("")
-    public void post(@RequestBody Person person){
+    public void post(@RequestBody PersonRequest personRequest){
         log.info("people : {}", personRepository.findAll());
-        personApiService.save(person);
+        personApiService.save(personRequest);
     }
 
     @PutMapping("")

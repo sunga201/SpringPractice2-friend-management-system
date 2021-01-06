@@ -55,7 +55,10 @@ public class PersonApiService {
         personRepository.save(person);
     }
 
-    public void save(Person person){
+    public void save(PersonRequest body){
+        Person person = new Person();
+        person.set(body);
+        log.info("person : {}", person);
         personRepository.save(person);
     }
 }

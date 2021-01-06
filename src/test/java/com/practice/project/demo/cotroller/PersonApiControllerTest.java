@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.project.demo.Repository.PersonRepository;
 import com.practice.project.demo.entity.Person;
 import com.practice.project.demo.entity.dto.Birthday;
+import com.practice.project.demo.network.request.PersonRequest;
 import com.practice.project.demo.service.api.PersonApiService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.descriptor.web.FragmentJarScannerCallback;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
@@ -64,30 +66,52 @@ class PersonApiControllerTest {
 
     @Test
     void post() throws Exception{
+        PersonRequest personRequest = PersonRequest.builder()
+                .name("martin")
+                .hobby("Programming")
+                .address("판교")
+                .birthday(LocalDate.now())
+                .job("programmer")
+                .build();
+
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/person")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\" : \"martin2\", \"age\" : 16, \"bloodType\" : \"O\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(toJSON(personRequest))
         ).andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Person person = personRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
+                .get(0);
+
+        System.out.println("get person : " + person);
+        Assertions.assertAll(
+                ()->Assertions.assertEquals(person.getName(), "martin"),
+                ()->Assertions.assertEquals(person.getAddress(), "판교"),
+                ()->Assertions.assertEquals(person.getHobby(), "Programming"),
+                ()->Assertions.assertEquals(person.getBirthday(), Birthday.of(LocalDate.now())),
+                ()->Assertions.assertEquals(person.getJob(), "programmer")
+        );
     }
 
     @Test
     void put() throws Exception{
-        Person person = Person.builder()
+        PersonRequest personRequest = PersonRequest.builder()
                 .id(2L)
                 .name("changeMartin")
                 .address("판교")
-                .birthday(Birthday.of(LocalDate.now()))
+                .birthday(LocalDate.now())
                 .hobby("programming")
                 .job("programmer")
                 .build();
 
-        System.out.println("toJSON, value : " + toJSON(person));
+        System.out.println("toJSON, value : " + toJSON(personRequest));
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJSON(person))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(toJSON(personRequest))
         ).andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
@@ -122,5 +146,9 @@ class PersonApiControllerTest {
 
     private String toJSON(Person person) throws JsonProcessingException {
         return objectMapper.writeValueAsString(person);
+    }
+
+    private String toJSON(PersonRequest personRequest) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(personRequest);
     }
 }
