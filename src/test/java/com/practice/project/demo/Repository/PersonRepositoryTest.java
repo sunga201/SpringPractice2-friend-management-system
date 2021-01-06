@@ -11,6 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class PersonRepositoryTest {
@@ -18,43 +19,52 @@ class PersonRepositoryTest {
     PersonRepository personRepository;
 
     @Test
-    public void crud(){
-        Person person = Person.builder()
-                .name("Brown")
-                .hobby("puzzle")
-                .address("서울시 동대문구")
-                .job("backend engineer")
-                .build();
+    public void findByName() throws Exception{
+        List<Person> people = personRepository.findByName("timmy")
+                .orElseThrow(()->new Exception("데이터가 존재하지 않습니다."));
+        Assertions.assertEquals(people.size(), 1);
 
-        Person newPerson = personRepository.save(person);
-        Assertions.assertNotNull(newPerson);
-        System.out.println(personRepository.findAll());
-        System.out.println(personRepository.findByName("sophia").get());
-    }
-
-    /*@Test // bloodtype 지웠음. 테스트케이스도 같이 제거
-    public void getByBloodType(){
-        List<Person> result = personRepository.findByBloodType("O").get();
-        personRepository.findAll().forEach(System.out::println);
-        Assertions.assertEquals(result.size(), 2);
-        Assertions.assertEquals(result.get(0).getName(), "benny");
-    }*/
-
-    public void givenPerson(String name, LocalDate birthday) {
-        Person p = Person.builder()
-                .name(name)
-                .build();
-
-        p.setBirthday(Birthday.of(birthday));
-        Person newPerson = personRepository.save(p);
+        Person person = people.get(0);
+        System.out.println("people : " + people);
+        Assertions.assertAll(
+                ()->Assertions.assertEquals(person.getName(), "timmy"),
+                ()->Assertions.assertEquals(person.getHobby(), "programming"),
+                ()->Assertions.assertEquals(person.getAddress(), "판교"),
+                ()->Assertions.assertEquals(person.getJob(), "programmer"),
+                ()->Assertions.assertEquals(person.getBirthday(), Birthday.of(LocalDate.of(2003, 12, 14))),
+                ()->Assertions.assertEquals(person.isDeleted(), false)
+        );
     }
 
     @Test
-    public void getByBirthday(){
-        personRepository.findByMonthOfBirthday(8).get().forEach(System.out::println);
+    public void findByNameIfDeleted() throws Exception{
+        List<Person> people = personRepository.findByName("andrew")
+                .orElseThrow(()->new Exception("데이터가 존재하지 않습니다."));
+    }
 
-        Person martin = new Person();
-        martin.birthdayToday();
-        martin.age();
+    @Test
+    public void findByMonthOfBirthday() throws Exception{
+        List<Person> people = personRepository.findByMonthOfBirthday(7)
+                .orElseThrow(() -> new Exception("데이터가 존재하지 않습니다."));
+
+        Assertions.assertEquals(people.size(), 1);
+
+        Person person = people.get(0);
+
+        Assertions.assertAll(
+                ()->Assertions.assertEquals(person.getName(), "dannis"),
+                ()->Assertions.assertEquals(person.getBirthday().getDayOfBirthday(), 13)
+        );
+    }
+
+    @Test
+    public void findByDeletedIsTrue() throws Exception{
+        List<Person> people = personRepository.findByDeletedIsTrue()
+                .orElseThrow(()->new Exception("데이터가 존재하지 않습니다."));
+
+        Assertions.assertEquals(people.size(), 1);
+        Person person = people.get(0);
+
+        Assertions.assertEquals(person.getName(), "andrew");
     }
 }
