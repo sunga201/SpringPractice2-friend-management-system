@@ -98,7 +98,7 @@ class PersonApiControllerTest {
     @Test
     void put() throws Exception{
         PersonRequest personRequest = PersonRequest.builder()
-                .id(2L)
+                .id(1L)
                 .name("changeMartin")
                 .address("판교")
                 .birthday(LocalDate.now())

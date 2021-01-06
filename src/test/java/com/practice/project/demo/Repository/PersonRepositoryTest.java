@@ -37,12 +37,6 @@ class PersonRepositoryTest {
     }
 
     @Test
-    public void findByNameIfDeleted() throws Exception{
-        List<Person> people = personRepository.findByName("andrew")
-                .orElseThrow(()->new Exception("데이터가 존재하지 않습니다."));
-    }
-
-    @Test
     public void findByMonthOfBirthday() throws Exception{
         List<Person> people = personRepository.findByMonthOfBirthday(7)
                 .orElseThrow(() -> new Exception("데이터가 존재하지 않습니다."));
@@ -63,8 +57,7 @@ class PersonRepositoryTest {
                 .orElseThrow(()->new Exception("데이터가 존재하지 않습니다."));
 
         Assertions.assertEquals(people.size(), 1);
-        Person person = people.get(0);
 
-        Assertions.assertEquals(person.getName(), "andrew");
+        Assertions.assertEquals(people.get(0).getName(), "andrew");
     }
 }
